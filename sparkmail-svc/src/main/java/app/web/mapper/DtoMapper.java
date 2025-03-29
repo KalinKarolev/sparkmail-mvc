@@ -9,9 +9,11 @@ public class DtoMapper {
 
     public static EmailResponse mapEmailToEmailResponse(Email email) {
         return EmailResponse.builder()
-            .subject(email.getSubject())
-            .status(email.getStatus())
-            .createdOn(email.getCreatedOn())
-            .build();
+                .emailId(email.getId())
+                .userEmail(email.getUserEmail())
+                .subject(email.getSubject())
+                .body(email.getBody())
+                .createdOn(email.getCreatedOn())
+                .build();
     }
 }

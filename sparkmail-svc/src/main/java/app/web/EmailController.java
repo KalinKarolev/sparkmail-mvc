@@ -7,10 +7,10 @@ import app.web.dto.EmailResponse;
 import app.web.mapper.DtoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/emails")
@@ -31,6 +31,22 @@ public class EmailController {
             .body(response);
     }
 
+    @GetMapping
+    public ResponseEntity<List<EmailResponse>> retrieveEmailsInStatusFailed() {
+        List<Email> failedEmails = emailService.findAllEmailsInStatusFailed();
 
+        List<EmailResponse> responseList = failedEmails.stream()
+                .map(DtoMapper::mapEmailToEmailResponse)
+                .toList();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseList);
+    }
+
+    @DeleteMapping("/failed")
+    public void deletedFailedEmail(@RequestParam(name ="emailId") UUID emailId) {
+        emailService.deleteFailedEmail(emailId);
+    }
 
 }

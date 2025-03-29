@@ -1,18 +1,22 @@
 package app.web.dto;
 
-import java.time.LocalDateTime;
-
-import app.model.EmailStatus;
 import lombok.Builder;
 import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
 public class EmailResponse {
 
+    private UUID emailId;
+
+    private String userEmail;
+
     private String subject;
 
-    private LocalDateTime createdOn;
+    private String body;
 
-    private EmailStatus status;
+    private LocalDateTime createdOn;
 }

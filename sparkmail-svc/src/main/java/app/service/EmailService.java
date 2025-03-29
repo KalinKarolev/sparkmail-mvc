@@ -1,7 +1,6 @@
 package app.service;
 
-import java.time.LocalDateTime;
-
+import app.exception.DomainException;
 import app.model.Email;
 import app.model.EmailStatus;
 import app.repository.EmailRepository;
@@ -10,6 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -50,5 +53,18 @@ public class EmailService {
         return emailRepository.save(email);
     }
 
+    public void deleteFailedEmail(UUID emailId) {
+        Email email = findEmailById(emailId);
+        emailRepository.delete(email);
+        log.info("Email with id {} was resent and deleted.", emailId);
+    }
 
+    public Email findEmailById(UUID emailId) {
+        return emailRepository.findById(emailId)
+                .orElseThrow(() -> new DomainException("No spark found with ID: " + emailId));
+    }
+
+    public List<Email> findAllEmailsInStatusFailed() {
+        return emailRepository.findAllByStatus(EmailStatus.FAILED);
+    }
 }
