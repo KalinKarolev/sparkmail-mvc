@@ -1,6 +1,6 @@
 package app.service;
 
-import app.exception.DomainException;
+import app.exception.EmailNotFoundException;
 import app.model.Email;
 import app.model.EmailStatus;
 import app.repository.EmailRepository;
@@ -61,7 +61,7 @@ public class EmailService {
 
     public Email findEmailById(UUID emailId) {
         return emailRepository.findById(emailId)
-                .orElseThrow(() -> new DomainException("No spark found with ID: " + emailId));
+                .orElseThrow(() -> new EmailNotFoundException("No email found with ID: " + emailId));
     }
 
     public List<Email> findAllEmailsInStatusFailed() {
